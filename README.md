@@ -119,7 +119,6 @@ https://food-reel-web-app.onrender.com/
 
 ## 🔧 Setup Instructions
 
-##Project setup
 ```bash
 git clone https://github.com/savankansagara1/Food-reel-web-app.git
 cd Food-reel-web-app
@@ -135,7 +134,8 @@ npm start
 cd frontend
 npm install
 ```
-##🙌 Author
+
+## 🙌 Author
 
 Savan Kansagara
 Aspiring Full Stack Developer
