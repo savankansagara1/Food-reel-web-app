@@ -16,7 +16,7 @@ api.interceptors.response.use(
   (res) => res,
   (err) => {
     if (err?.response?.status === 401) {
-      window.location.href = "/login";
+      window.location.href = "/user/login";
     }
     return Promise.reject(err);
   }
@@ -55,8 +55,14 @@ export default function Home() {
 
         if (isMounted) setVideos(merged);
       } catch (err) {
-        if (isMounted) setError("Failed to load videos");
-      } finally {
+  // agar user logged-in nahi hai → redirect to /user/login
+  if (err?.response?.status === 401) {
+    navigate("/user/login");
+    return;
+  }
+
+  if (isMounted) setError("Failed to load videos");
+} finally {
         if (isMounted) setLoading(false);
       }
     })();
