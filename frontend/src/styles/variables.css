@@ -1,0 +1,34 @@
+/* Centralized design tokens and theme variables */
+:root{
+  --bg: #ffffff;
+  --card: #f6f7fb;
+  --surface: #ffffff;
+  --text: #0b1220;
+  --muted: #6b7280;
+  --accent: #2563eb;
+  --danger: #ef4444;
+  --radius: 12px;
+  --shadow: 0 8px 24px rgba(16,24,40,0.06);
+  --glass: rgba(255,255,255,0.6);
+}
+
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg: #0b0f14;
+    --card: #0f1720;
+    --surface: #0b1220;
+    --text: #e6eef8;
+    --muted: #94a3b8;
+    --accent: #3dd3ff;
+    --danger: #ff7b7b;
+    --radius: 12px;
+    --shadow: 0 8px 24px rgba(2,6,23,0.6);
+    --glass: rgba(255,255,255,0.03);
+  }
+}
+
+/* small helpers */
+:root{
+  --container-width: 420px;
+  --gutter: 20px;
+}

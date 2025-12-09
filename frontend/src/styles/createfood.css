@@ -1,0 +1,140 @@
+@import './variables.css';
+
+/* Page wrapper */
+.createfood-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: calc(var(--gutter) * 1.5);
+}
+
+/* Card container */
+.createfood-card {
+  width: 100%;
+  max-width: var(--container-width);
+  background: linear-gradient(180deg, var(--card), var(--surface));
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: var(--shadow);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  margin-top: 20px;
+}
+
+/* Headings */
+.createfood-card h2 {
+  margin-bottom: 6px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.createfood-card .lead {
+  margin-bottom: 18px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Video preview */
+.video-preview {
+  width: 100%;
+  border-radius: 12px;
+  margin-bottom: 16px;
+  box-shadow: var(--shadow);
+}
+
+/* Inputs */
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.form-row label {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.form-row input,
+.form-row textarea {
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: var(--surface);
+  color: var(--text);
+  outline: none;
+}
+
+.form-row input[type="file"] {
+  padding: 6px;
+  background: transparent;
+}
+
+/* Button */
+.btn {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(90deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #fff));
+  border-radius: 10px;
+  color: #fff;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .createfood-card {
+    padding: 18px;
+    border-radius: 10px;
+  }
+}
+
+/* Upload Box */
+.upload-box {
+  width: 100%;
+  border: 2px dashed var(--muted);
+  border-radius: 14px;
+  padding: 20px;
+  background: var(--glass);
+  transition: 0.2s ease;
+  margin-bottom: 20px;
+}
+
+.upload-box:hover {
+  border-color: var(--accent);
+  background: rgba(255,255,255,0.1);
+}
+
+/* Label wraps entire drag-drop area */
+.upload-label {
+  width: 100%;
+  display: block;
+  cursor: pointer;
+}
+
+.upload-label input[type="file"] {
+  display: none;
+}
+
+/* Placeholder content */
+.upload-placeholder {
+  text-align: center;
+  padding: 20px 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.upload-icon {
+  font-size: 42px;
+  margin-bottom: 8px;
+}
+
+/* Video Preview */
+.upload-preview {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+
