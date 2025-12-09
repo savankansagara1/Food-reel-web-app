@@ -83,7 +83,7 @@ const CreateFood = () => {
       setUploading(true);
       setProgress(0);
 
-      await axios.post("http://localhost:3000/api/food", form, {
+      await axios.post(`${import.meta.env.VITE_API_URL}/api/food`, form, {
         withCredentials: true,
         signal: controller.signal,
         onUploadProgress: (evt) => {

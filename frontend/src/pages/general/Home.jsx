@@ -18,8 +18,8 @@ export default function Home() {
     (async () => {
       try {
         const [foodRes, savedRes] = await Promise.all([
-          axios.get("http://localhost:3000/api/food", { withCredentials: true }),
-          axios.get("http://localhost:3000/api/food/saved", { withCredentials: true }),
+          axios.get(`${import.meta.env.VITE_API_URL}/api/food`, { withCredentials: true }),
+          axios.get(`${import.meta.env.VITE_API_URL}/api/food/saved`, { withCredentials: true }),
         ]);
 
         const foodItems = foodRes?.data?.foodItems ?? [];
@@ -87,7 +87,7 @@ export default function Home() {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/food/like",
+        `${import.meta.env.VITE_API_URL}/api/food/like`,
         { foodId: item._id },
         { withCredentials: true }
       );
@@ -128,7 +128,7 @@ export default function Home() {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/food/save",
+        `${import.meta.env.VITE_API_URL}/api/food/save`,
         { foodId: item._id },
         { withCredentials: true }
       );

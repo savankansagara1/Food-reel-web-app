@@ -14,7 +14,7 @@ const PartnerRegister = () => {
     const phone = e.target.phone.value;
     const password = e.target.password.value;
     const response = await axios.post(
-      "http://localhost:3000/api/auth/foodpartner/register",
+      `${import.meta.env.VITE_API_URL}/api/auth/foodpartner/register`,
       {
         fullname,
         email,

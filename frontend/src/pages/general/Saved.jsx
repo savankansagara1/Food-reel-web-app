@@ -17,7 +17,7 @@ export default function Saved() {
     let isMounted = true;
     (async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/food/saved", {
+        const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/food/saved`, {
           withCredentials: true,
         });
         const list = (res?.data?.savedItems ?? []).map((v) => ({
@@ -86,7 +86,7 @@ export default function Saved() {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/food/like",
+        `${import.meta.env.VITE_API_URL}/api/food/like`,
         { foodId: item._id },
         { withCredentials: true }
       );
@@ -126,7 +126,7 @@ export default function Saved() {
 
     try {
       const res = await axios.post(
-        "http://localhost:3000/api/food/save",
+        `${import.meta.env.VITE_API_URL}/api/food/save`,
         { foodId: item._id },
         { withCredentials: true }
       );

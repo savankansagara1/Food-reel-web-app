@@ -19,7 +19,7 @@ export default function Profile() {
       try {
         // 1) Partner profile (protected: send cookie)
         const res = await axios.get(
-          `http://localhost:3000/api/foodpartner/${id}`,
+          `${import.meta.env.VITE_API_URL}/api/foodpartner/${id}`,
           { withCredentials: true }
         );
         if (!mounted) return;
@@ -30,7 +30,7 @@ export default function Profile() {
 
         // 2) This partner's videos (protected: send cookie!)
         const foodRes = await axios.get(
-          `http://localhost:3000/api/food?partner=${id}`,
+          `${import.meta.env.VITE_API_URL}/api/food?partner=${id}`,
           { withCredentials: true } // <-- REQUIRED or you'll get 401
         );
         if (!mounted) return;

@@ -13,14 +13,14 @@ export default function LogoutButton() {
     try {
       // Try partner logout (ignore fail)
       await axios
-        .get("http://localhost:3000/api/auth/foodpartner/logout", {
+        .get(`${import.meta.env.VITE_API_URL}/api/auth/foodpartner/logout`, {
           withCredentials: true,
         })
         .catch(() => {});
 
       // Try user logout (ignore fail)
       await axios
-        .get("http://localhost:3000/api/auth/user/logout", {
+        .get(`${import.meta.env.VITE_API_URL}/api/auth/user/logout`, {
           withCredentials: true,
         })
         .catch(() => {});
