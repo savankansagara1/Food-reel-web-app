@@ -1,219 +1,157 @@
 @import './variables.css';
 
-/* ---------------- Root Tokens ---------------- */
+/* MOBILE-FIRST CALC */
 :root {
-  --nav-h: 56px;
-  --nav-bg: rgba(12, 16, 22, 0.95); /* Slightly more opaque for desktop contrast */
-  --nav-border: rgba(255,255,255,0.10);
+  --app-w: 100vw; /* Mobile → Full width */
+
+  /* Safe nav height (auto adjust) */
+  --nav-h: clamp(48px, 7vh, 60px);
+
+  --nav-bg: rgba(12,16,22,0.9);
+  --nav-border: rgba(255,255,255,0.12);
   --icon-muted: #d7dbe1;
-  
-  /* Responsive Constraint Variables */
-  --app-max-width: 480px; 
 }
 
-/* Global Reset to handle the background on Desktop */
-body {
+/* ---------------- PAGE ---------------- */
+html, body {
   margin: 0;
   padding: 0;
-  background-color: #000; /* Fallback */
-  /* On desktop, show a dark gray background outside the reel */
-  background-image: linear-gradient(to bottom, #1a1a1a, #000); 
-  display: flex;
-  justify-content: center; /* Centers the app on large screens */
-  overflow: hidden; /* Prevent body scroll, handle scroll in reels-screen */
+  height: 100%;
+  overflow: hidden;     /* Only app scrolls */
+  background: #000;
+  color-scheme: dark;
 }
 
-/* ---------------- Reels Screen ---------------- */
+/* ---------------- APP CONTAINER ---------------- */
 .reels-screen {
-  height: 100dvh; /* dvh handles mobile address bars better than vh */
-  width: 100%;
-  
-  /* Desktop Constraints */
-  max-width: var(--app-max-width);
+  width: var(--app-w);
+  height: 100svh;      /* Stable height on phones */
   background: #000;
   position: relative;
-  box-shadow: 0 0 50px rgba(0,0,0,0.5); /* Shadow for depth on desktop */
-  
-  /* Scrolling */
+
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
+
   padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom));
-  
-  /* Hide Scrollbar for cleaner look */
-  scrollbar-width: none; /* Firefox */
+
+  -webkit-overflow-scrolling: touch;
 }
 
-.reels-screen::-webkit-scrollbar { 
-  display: none; /* Chrome/Safari */
+/* Hide scrollbars on mobile */
+.reels-screen::-webkit-scrollbar {
+  display: none;
 }
 
-/* Each reel (full page) */
+/* ---------------- REEL ITEM ---------------- */
 .reel {
-  position: relative;
-  height: 100dvh; /* Match screen height */
   width: 100%;
+  height: 100svh;
   scroll-snap-align: start;
+
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #222; /* Placeholder while video loads */
+
+  background: #111;
   overflow: hidden;
 }
 
 .reel video {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Ensures video fills the container */
-  display: block;
+  object-fit: cover;
 }
 
-/* ---------------- Overlay (description + button) ---------------- */
+/* ---------------- OVERLAY ---------------- */
 .reel-overlay {
   position: absolute;
   inset: 0;
-  pointer-events: none;
   display: flex;
   align-items: flex-end;
-  padding-bottom: calc(var(--nav-h) + 12px + env(safe-area-inset-bottom));
-  z-index: 10;
+  pointer-events: none;
+  padding: 0 16px calc(var(--nav-h) + 20px);
 }
 
 .reel-overlay-gradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    to bottom,
-    rgba(0,0,0,0) 0%,
-    rgba(0,0,0,0) 60%,
-    rgba(0, 0, 0, 0.85) 100%
-  );
+  background: linear-gradient(to bottom, transparent 50%, rgba(0,0,0,0.85) 100%);
 }
 
 .reel-content {
   position: relative;
-  width: 100%;
-  padding: 28px 16px 6px;
   pointer-events: auto;
+  width: 100%;
+  padding-bottom: 10px;
 }
 
 .reel-description {
   color: #fff;
   font-size: 1rem;
-  line-height: 1.35;
   margin-bottom: 10px;
-  padding-right: 4rem; 
-  
-  /* Line Clamping */
+
   overflow: hidden;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+  -webkit-line-clamp: 2;
+
+  text-shadow: 0 1px 2px rgba(0,0,0,.5);
 }
 
-/* ---------------- Visit Store Button ---------------- */
+/* ---------------- BUTTON ---------------- */
 .reel-btn {
-  display: inline-block;
-  align-self: flex-start;
-  margin-bottom: 12px;
-  padding: 8px 16px;
-  border: none;
-  outline: none;
-  font-size: 14px;
-  font-weight: 600;
-  background: #1e73ff; 
+  background: #1e73ff;
   color: #fff;
+  padding: 8px 16px;
   border-radius: 8px;
+  font-weight: 600;
+  border: none;
   cursor: pointer;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
-  transition: transform .08s ease, filter .15s ease;
 }
-.reel-btn:active { transform: translateY(1px); }
-.reel-btn:hover { filter: brightness(1.1); }
 
-/* ---------------- Right Action Stack ---------------- */
+/* ---------------- ACTIONS ---------------- */
 .reel-actions {
   position: absolute;
-  right: 10px;
-  bottom: calc(var(--nav-h) + 24px + env(safe-area-inset-bottom)); 
+  right: 14px;
+  bottom: calc(var(--nav-h) + 30px);
   display: flex;
   flex-direction: column;
   gap: 16px;
-  align-items: center;
-  pointer-events: auto;
-  z-index: 30;
-}
-
-.action {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 6px;
-  color: var(--icon-muted);
-}
-
-.action-btn .icon {
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  transition: 0.2s ease;
-}
-
-.action-btn.liked .icon {
-  fill: #e91e63; /* Use a color for liked state, e.g., Pink/Red */
-  stroke: #e91e63;
-  transform: scale(1.15);
 }
 
 .action-btn {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.16);
-  background: rgba(0,0,0,0.45);
-  backdrop-filter: blur(4px); /* Adds glass effect */
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(255,255,255,0.15);
   display: grid;
   place-items: center;
-  cursor: pointer;
-  transition: all .15s ease;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
 }
-.action-btn:hover {
-  background: rgba(0,0,0,0.65);
-  transform: scale(1.05);
-}
-.action-btn:active { transform: scale(0.95); }
 
 .action-count {
   font-size: 12px;
-  font-weight: 500;
   color: #fff;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
 }
 
-/* ---------------- Bottom Nav (Responsive Fixed) ---------------- */
+/* ---------------- BOTTOM NAV ---------------- */
 .bottom-nav {
   position: fixed;
   bottom: 0;
+  width: 100%;
   height: calc(var(--nav-h) + env(safe-area-inset-bottom));
   padding-bottom: env(safe-area-inset-bottom);
-  z-index: 40;
-  
-  /* Glassmorphism */
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  background: var(--nav-bg);
-  border-top: 1px solid var(--nav-border);
-  
+
   display: grid;
   grid-template-columns: 1fr 1fr;
-  
-  /* Responsive Centering logic */
-  width: 100%;
-  max-width: var(--app-max-width);
-  /* Since we are centering the app, we must center the fixed nav too */
-  left: 50%;
-  transform: translateX(-50%);
+
+  background: var(--nav-bg);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--nav-border);
+
+  z-index: 999;
 }
 
 .nav-item {
@@ -223,53 +161,34 @@ body {
   justify-content: center;
   gap: 4px;
   color: var(--icon-muted);
-  text-decoration: none;
-  font-size: 11px;
-  transition: color .15s ease;
-  height: 100%; /* Fill nav height */
 }
 
 .nav-item.active {
-  color: #fff;
+  color: white;
 }
 
-.icon {
-  width: 24px;
-  height: 24px;
-  display: block;
-  fill: currentColor;
-}
-
-/* ---------------- Media Queries ---------------- */
-
-/* 1. Large Screens (Tablet Landscape, Laptop, Desktop) */
-@media (min-width: 768px) {
-  /* Add a border to the app container for definition */
-  .reels-screen {
-    border-left: 1px solid #333;
-    border-right: 1px solid #333;
-  }
-  
-  /* Make the scrollbar thin but visible on desktop so users know they can scroll */
-  .reels-screen::-webkit-scrollbar { 
-    display: block;
-    width: 6px;
-  }
-  .reels-screen::-webkit-scrollbar-thumb {
-    background: rgba(255,255,255,0.2);
-    border-radius: 3px;
-  }
-}
-
-/* 2. Small Mobile / Landscape Mobile */
-@media (max-height: 600px) {
+/* ---------------- TABLET & DESKTOP ---------------- */
+@media (min-width: 580px) {
   :root {
-    --nav-h: 48px; /* Shrink nav on short screens */
+    --app-w: 420px;          /* Phone-sized view in center */
   }
-  .reel-description {
-    -webkit-line-clamp: 1; /* Show less text */
+
+  body {
+    display: flex;
+    justify-content: center;
+    background: #000;
   }
-  .reel-actions {
-    gap: 10px; /* Compress actions */
+
+  .reels-screen {
+    border-left: 1px solid #2a2a2a;
+    border-right: 1px solid #2a2a2a;
+    box-shadow: 0 0 40px rgba(0,0,0,0.5);
+  }
+}
+
+/* ---------------- LARGE DESKTOP ---------------- */
+@media (min-width: 980px) {
+  :root {
+    --app-w: 480px;  
   }
 }
