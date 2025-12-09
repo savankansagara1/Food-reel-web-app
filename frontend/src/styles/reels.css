@@ -2,38 +2,69 @@
 
 /* ---------------- Root Tokens ---------------- */
 :root {
-  --nav-h: 56px;                    /* Bottom navigation height */
-  --nav-bg: rgba(12, 16, 22, 0.88); /* Less transparent, crisper */
+  --nav-h: 56px;
+  --nav-bg: rgba(12, 16, 22, 0.95); /* Slightly more opaque for desktop contrast */
   --nav-border: rgba(255,255,255,0.10);
-  --icon-muted: #d7dbe1;            /* nav + actions muted color */
+  --icon-muted: #d7dbe1;
+  
+  /* Responsive Constraint Variables */
+  --app-max-width: 480px; 
+}
+
+/* Global Reset to handle the background on Desktop */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #000; /* Fallback */
+  /* On desktop, show a dark gray background outside the reel */
+  background-image: linear-gradient(to bottom, #1a1a1a, #000); 
+  display: flex;
+  justify-content: center; /* Centers the app on large screens */
+  overflow: hidden; /* Prevent body scroll, handle scroll in reels-screen */
 }
 
 /* ---------------- Reels Screen ---------------- */
 .reels-screen {
-  height: 100vh;
-  width: 100vw;
+  height: 100dvh; /* dvh handles mobile address bars better than vh */
+  width: 100%;
+  
+  /* Desktop Constraints */
+  max-width: var(--app-max-width);
+  background: #000;
+  position: relative;
+  box-shadow: 0 0 50px rgba(0,0,0,0.5); /* Shadow for depth on desktop */
+  
+  /* Scrolling */
   overflow-y: scroll;
   scroll-snap-type: y mandatory;
-  background: #000;
-  padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom)); /* room for fixed nav */
+  padding-bottom: calc(var(--nav-h) + env(safe-area-inset-bottom));
+  
+  /* Hide Scrollbar for cleaner look */
+  scrollbar-width: none; /* Firefox */
+}
+
+.reels-screen::-webkit-scrollbar { 
+  display: none; /* Chrome/Safari */
 }
 
 /* Each reel (full page) */
 .reel {
   position: relative;
-  height: 100vh;
-  width: 100vw;
+  height: 100dvh; /* Match screen height */
+  width: 100%;
   scroll-snap-align: start;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #000;
+  background: #222; /* Placeholder while video loads */
+  overflow: hidden;
 }
 
 .reel video {
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures video fills the container */
+  display: block;
 }
 
 /* ---------------- Overlay (description + button) ---------------- */
@@ -44,18 +75,24 @@
   display: flex;
   align-items: flex-end;
   padding-bottom: calc(var(--nav-h) + 12px + env(safe-area-inset-bottom));
+  z-index: 10;
 }
 
 .reel-overlay-gradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(transparent 60%, rgba(0, 0, 0, 0.78) 100%);
+  background: linear-gradient(
+    to bottom,
+    rgba(0,0,0,0) 0%,
+    rgba(0,0,0,0) 60%,
+    rgba(0, 0, 0, 0.85) 100%
+  );
 }
 
 .reel-content {
   position: relative;
   width: 100%;
-  padding: 28px 16px 6px; /* slightly lower content */
+  padding: 28px 16px 6px;
   pointer-events: auto;
 }
 
@@ -64,15 +101,17 @@
   font-size: 1rem;
   line-height: 1.35;
   margin-bottom: 10px;
-  max-height: 3.0em;
-  padding-right: 4rem; /* space so text doesn’t run under actions */
+  padding-right: 4rem; 
+  
+  /* Line Clamping */
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.5);
 }
 
-/* ---------------- Visit Store Button (compact, left) ---------------- */
+/* ---------------- Visit Store Button ---------------- */
 .reel-btn {
   display: inline-block;
   align-self: flex-start;
@@ -82,7 +121,7 @@
   outline: none;
   font-size: 14px;
   font-weight: 600;
-  background: #1e73ff; /* CTA blue */
+  background: #1e73ff; 
   color: #fff;
   border-radius: 8px;
   cursor: pointer;
@@ -90,13 +129,13 @@
   transition: transform .08s ease, filter .15s ease;
 }
 .reel-btn:active { transform: translateY(1px); }
-.reel-btn:hover { filter: brightness(1.05); }
+.reel-btn:hover { filter: brightness(1.1); }
 
 /* ---------------- Right Action Stack ---------------- */
 .reel-actions {
   position: absolute;
   right: 10px;
-  bottom: calc(var(--nav-h) + 24px); /* clears bottom nav */
+  bottom: calc(var(--nav-h) + 24px + env(safe-area-inset-bottom)); 
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -105,7 +144,6 @@
   z-index: 30;
 }
 
-/* Match bottom nav style: muted icon color, subtle ring */
 .action {
   display: flex;
   flex-direction: column;
@@ -114,7 +152,6 @@
   color: var(--icon-muted);
 }
 
-/* default icon look: outline (stroke), no fill */
 .action-btn .icon {
   fill: none;
   stroke: currentColor;
@@ -122,81 +159,117 @@
   transition: 0.2s ease;
 }
 
-/* when liked: WHITE fill */
 .action-btn.liked .icon {
-  fill: #ffffff;
-  stroke: #ffffff;
+  fill: #e91e63; /* Use a color for liked state, e.g., Pink/Red */
+  stroke: #e91e63;
   transform: scale(1.15);
-}
-
-/* when saved: slightly brighter color (optional visual cue) */
-.action-btn.saved {
-  color: #ffffff;
 }
 
 .action-btn {
   width: 44px;
   height: 44px;
   border-radius: 50%;
-  border: 1px solid rgba(255,255,255,0.16);   /* thinner, cleaner */
-  background: rgba(0,0,0,0.45);               /* closer to bottom nav bg */
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(0,0,0,0.45);
+  backdrop-filter: blur(4px); /* Adds glass effect */
   display: grid;
   place-items: center;
   cursor: pointer;
-  transition: transform .08s ease, background .15s ease, border-color .15s ease, color .15s ease;
+  transition: all .15s ease;
   box-shadow: 0 4px 16px rgba(0,0,0,0.25);
 }
 .action-btn:hover {
-  background: rgba(0,0,0,0.55);
-  border-color: rgba(255,255,255,0.22);
+  background: rgba(0,0,0,0.65);
+  transform: scale(1.05);
 }
 .action-btn:active { transform: scale(0.95); }
 
 .action-count {
   font-size: 12px;
-  color: var(--icon-muted);
-  opacity: 0.95;
+  font-weight: 500;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.8);
 }
 
-/* ---------------- Bottom Nav ---------------- */
+/* ---------------- Bottom Nav (Responsive Fixed) ---------------- */
 .bottom-nav {
   position: fixed;
   bottom: 0;
-  left: 0;
-  width: 100%;
-  height: var(--nav-h);
+  height: calc(var(--nav-h) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
   z-index: 40;
-  backdrop-filter: blur(8px);
-  background: var(--nav-bg);     /* more solid */
+  
+  /* Glassmorphism */
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: var(--nav-bg);
   border-top: 1px solid var(--nav-border);
+  
   display: grid;
   grid-template-columns: 1fr 1fr;
+  
+  /* Responsive Centering logic */
+  width: 100%;
+  max-width: var(--app-max-width);
+  /* Since we are centering the app, we must center the fixed nav too */
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .nav-item {
-  display: grid;
-  place-items: center;
-  gap: 6px;
-  padding: 10px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
   color: var(--icon-muted);
   text-decoration: none;
-  font-size: 12px;
+  font-size: 11px;
   transition: color .15s ease;
+  height: 100%; /* Fill nav height */
 }
 
 .nav-item.active {
-  color: #fff;  /* active = bright white */
+  color: #fff;
 }
 
-/* Icons use currentColor so they match .action/.nav-item color */
 .icon {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   display: block;
   fill: currentColor;
 }
 
-/* ---------------- Desktop Tweaks ---------------- */
-@media (min-width: 480px) {
-  .reel-btn { max-width: 420px; }
+/* ---------------- Media Queries ---------------- */
+
+/* 1. Large Screens (Tablet Landscape, Laptop, Desktop) */
+@media (min-width: 768px) {
+  /* Add a border to the app container for definition */
+  .reels-screen {
+    border-left: 1px solid #333;
+    border-right: 1px solid #333;
+  }
+  
+  /* Make the scrollbar thin but visible on desktop so users know they can scroll */
+  .reels-screen::-webkit-scrollbar { 
+    display: block;
+    width: 6px;
+  }
+  .reels-screen::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+  }
+}
+
+/* 2. Small Mobile / Landscape Mobile */
+@media (max-height: 600px) {
+  :root {
+    --nav-h: 48px; /* Shrink nav on short screens */
+  }
+  .reel-description {
+    -webkit-line-clamp: 1; /* Show less text */
+  }
+  .reel-actions {
+    gap: 10px; /* Compress actions */
+  }
 }
